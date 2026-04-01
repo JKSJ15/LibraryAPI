@@ -80,11 +80,11 @@ GET /books
 
 1. Clone the repository:
 ```
-git clone https://github.com/your-username/books-api-spring-boot.git
+git clone https://github.com/JKSJ15/libraryAPI.git
 ```
 2. Navigate to the project folder:
 ```
-cd books-api-spring-boot
+cd libraryAPI
 ```
 3. Configure the database in `application.properties`
 4. Run the application:
