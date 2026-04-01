@@ -1,17 +1,20 @@
 package library.com.controller;
 
+import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import library.com.dto.BookDto;
-import library.com.entity.Book;
 import library.com.service.BookService;
 
 @RestController
@@ -23,11 +26,33 @@ public class BookController {
 		this.bs = bs;
 	}
 	@GetMapping
-	public ResponseEntity<Page<Book>> listAll(Pageable pageable){
+	public ResponseEntity<Page<BookDto>> listAll(Pageable pageable){
 		return new ResponseEntity<>(bs.listAll(pageable), HttpStatus.OK);
+	}
+	@GetMapping("/{id}")
+	public ResponseEntity<BookDto> findById(@PathVariable long id){
+		return new ResponseEntity<>(bs.findById(id), HttpStatus.OK);
+	}
+	@GetMapping("/find")
+	public ResponseEntity<Page<BookDto>> find(@RequestParam(required = false) String title,
+			@RequestParam(required = false) String author,
+			@RequestParam(required = false) String genre,
+			@RequestParam(required = false) LocalDate date,
+			Pageable pageable){
+		return new ResponseEntity<>(bs.find(title, author, genre, date, pageable), HttpStatus.OK);
 	}
 	@PostMapping
 	public ResponseEntity<BookDto> save(@RequestBody BookDto dto) {
 		return new ResponseEntity<>(bs.save(dto), HttpStatus.CREATED);
 	}
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable long id){
+		bs.delete(id);
+		return new ResponseEntity(HttpStatus.OK);
+	}
+	@PutMapping("/{id}")
+	public ResponseEntity<BookDto> update(@PathVariable long id, @RequestBody BookDto dto){
+		return new ResponseEntity<>(bs.update(id, dto), HttpStatus.OK);
+	}
+	
 }

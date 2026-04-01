@@ -1,20 +1,33 @@
 package library.com.dto;
 
 import java.time.LocalDate;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
+@Valid
 public class BookDto {
+	@NotNull
+	private Long id;
 	private String title;
 	private String author;
 	private LocalDate dateOfPublication;
-	private String gernre;
+	private String genre;
 
-	public BookDto(String title, String author, LocalDate dateOfPublication, String gernre) {
+	public BookDto(@NotNull Long id,@NotEmpty String title, @NotEmpty String author,
+			@NotEmpty LocalDate dateOfPublication, String genre) {
+		super();
+		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.dateOfPublication = dateOfPublication;
-		this.gernre = gernre;
+		this.genre = genre;
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -33,10 +46,10 @@ public class BookDto {
 	public void setDateOfPublication(LocalDate dateOfPublication) {
 		this.dateOfPublication = dateOfPublication;
 	}
-	public String getGernre() {
-		return gernre;
+	public String getGenre() {
+		return genre;
 	}
-	public void setGernre(String gernre) {
-		this.gernre = gernre;
+	public void setGernre(String genre) {
+		this.genre = genre;
 	}
 }

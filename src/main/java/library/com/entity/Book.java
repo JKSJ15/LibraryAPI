@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 public class Book {
@@ -14,22 +15,24 @@ public class Book {
 	private Long id;
 	
 	@Column(name = "title", length = 100)
+	@NotEmpty(message = "title cannot be empty!")
 	private String title;
 	
 	@Column(name = "author", length = 100)
+	@NotEmpty(message = "author cannot be empty!")
 	private String author;
 	
 	@Column(name = "dateofpublication")
 	private LocalDate dateOfPublication;
 	
 	@Column(name = "genre", length = 100)
-	private String gernre;
+	private String genre;
 
-	public Book(String title, String author, LocalDate dateOfPublication, String gernre) {
+	public Book(String title, String author, LocalDate dateOfPublication, String genre) {
 		this.title = title;
 		this.author = author;
 		this.dateOfPublication = dateOfPublication;
-		this.gernre = gernre;
+		this.genre = genre;
 	}
 	public Book() {}
 	
@@ -54,11 +57,11 @@ public class Book {
 	public void setDateOfPublication(LocalDate dateOfPublication) {
 		this.dateOfPublication = dateOfPublication;
 	}
-	public String getGernre() {
-		return gernre;
+	public String getGenre() {
+		return genre;
 	}
-	public void setGernre(String gernre) {
-		this.gernre = gernre;
+	public void setGenre(String genre) {
+		this.genre = genre;
 	}
 
 }
