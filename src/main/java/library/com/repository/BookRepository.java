@@ -9,8 +9,8 @@ import library.com.entity.Book;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>{
-	public Page<Book> findByTitleIgnoreCase(String title, Pageable pageable);
-	public Page<Book> findByAuthorIgnoreCase(String author, Pageable pageable);
-	public Page<Book> findByGenreIgnoreCase(String genre, Pageable pageable);
-	public Page<Book> findByDateOfPublication(LocalDate dateOfPublication, Pageable pageable);
+	public Page<Book> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+	public Page<Book> findByAuthorContainingIgnoreCase(String author, Pageable pageable);
+	public Page<Book> findByGenreContainingIgnoreCase(String genre, Pageable pageable);
+	public Page<Book> findByDateOfPublicationContaining(LocalDate dateOfPublication, Pageable pageable);
 }

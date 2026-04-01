@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
 import library.com.dto.BookDto;
 import library.com.service.BookService;
 
@@ -25,15 +27,11 @@ public class BookController {
 		super();
 		this.bs = bs;
 	}
-	@GetMapping
-	public ResponseEntity<Page<BookDto>> listAll(Pageable pageable){
-		return new ResponseEntity<>(bs.listAll(pageable), HttpStatus.OK);
-	}
 	@GetMapping("/{id}")
 	public ResponseEntity<BookDto> findById(@PathVariable long id){
 		return new ResponseEntity<>(bs.findById(id), HttpStatus.OK);
 	}
-	@GetMapping("/find")
+	@GetMapping()
 	public ResponseEntity<Page<BookDto>> find(@RequestParam(required = false) String title,
 			@RequestParam(required = false) String author,
 			@RequestParam(required = false) String genre,
@@ -42,13 +40,13 @@ public class BookController {
 		return new ResponseEntity<>(bs.find(title, author, genre, date, pageable), HttpStatus.OK);
 	}
 	@PostMapping
-	public ResponseEntity<BookDto> save(@RequestBody BookDto dto) {
+	public ResponseEntity<BookDto> save(@RequestBody @Valid BookDto dto) {
 		return new ResponseEntity<>(bs.save(dto), HttpStatus.CREATED);
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable long id){
 		bs.delete(id);
-		return new ResponseEntity(HttpStatus.OK);
+		return ResponseEntity.noContent().build();
 	}
 	@PutMapping("/{id}")
 	public ResponseEntity<BookDto> update(@PathVariable long id, @RequestBody BookDto dto){

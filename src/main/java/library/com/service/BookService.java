@@ -18,9 +18,6 @@ public class BookService {
 		super();
 		this.br = br;
 	}
-	public Page<BookDto> listAll(Pageable pageable){
-		return br.findAll(pageable).map(BookMapper::toDto);	
-	}
 	public BookDto findById(long id) {
 		Book found = br.findById(id).orElseThrow(()-> new BookNotFoundException("Book not found"));
 		return BookMapper.toDto(found);		
@@ -28,20 +25,20 @@ public class BookService {
 	public Page<BookDto> find(String title, String author, String genre, LocalDate dateOfPublication, Pageable pageable) {
 		Page<Book> books;
 		if(title!=null) {
-			 books = br.findByTitleIgnoreCase(title, pageable);
+			 books = br.findByTitleContainingIgnoreCase(title, pageable);
 		}else if (author!=null) {
-			 books = br.findByAuthorIgnoreCase(author, pageable);
+			 books = br.findByAuthorContainingIgnoreCase(author, pageable);
 		}else if (genre!=null) {
-			 books = br.findByGenreIgnoreCase(genre, pageable);
+			 books = br.findByGenreContainingIgnoreCase(genre, pageable);
 		}else if (dateOfPublication!=null) {
-			 books = br.findByDateOfPublication(dateOfPublication, pageable);
+			 books = br.findByDateOfPublicationContaining(dateOfPublication, pageable);
 		} else {
 			books = br.findAll(pageable);
 		}
 		return books.map(BookMapper::toDto);
 	}
 	public BookDto save(BookDto dto) {
-		LocalDate limit = LocalDate.of(0, 01, 01);
+		LocalDate limit = LocalDate.of(1, 01, 01);
 		if (dto.getDateOfPublication().isBefore(limit) ||
 			dto.getDateOfPublication().isAfter(LocalDate.now())) {
 		throw new InvalidDateException("Invalid date!");	
