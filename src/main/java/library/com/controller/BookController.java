@@ -35,9 +35,8 @@ public class BookController {
 	public ResponseEntity<Page<BookDto>> find(@RequestParam(required = false) String title,
 			@RequestParam(required = false) String author,
 			@RequestParam(required = false) String genre,
-			@RequestParam(required = false) LocalDate date,
 			Pageable pageable){
-		return new ResponseEntity<>(bs.find(title, author, genre, date, pageable), HttpStatus.OK);
+		return new ResponseEntity<>(bs.find(title, author, genre, pageable), HttpStatus.OK);
 	}
 	@PostMapping
 	public ResponseEntity<BookDto> save(@RequestBody @Valid BookDto dto) {

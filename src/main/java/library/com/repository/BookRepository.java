@@ -1,6 +1,5 @@
 package library.com.repository;
 
-import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +11,4 @@ public interface BookRepository extends JpaRepository<Book, Long>{
 	public Page<Book> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 	public Page<Book> findByAuthorContainingIgnoreCase(String author, Pageable pageable);
 	public Page<Book> findByGenreContainingIgnoreCase(String genre, Pageable pageable);
-	public Page<Book> findByDateOfPublicationContaining(LocalDate dateOfPublication, Pageable pageable);
 }

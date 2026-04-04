@@ -22,7 +22,7 @@ public class BookService {
 		Book found = br.findById(id).orElseThrow(()-> new BookNotFoundException("Book not found"));
 		return BookMapper.toDto(found);		
 	}
-	public Page<BookDto> find(String title, String author, String genre, LocalDate dateOfPublication, Pageable pageable) {
+	public Page<BookDto> find(String title, String author, String genre, Pageable pageable) {
 		Page<Book> books;
 		if(title!=null) {
 			 books = br.findByTitleContainingIgnoreCase(title, pageable);
@@ -30,8 +30,6 @@ public class BookService {
 			 books = br.findByAuthorContainingIgnoreCase(author, pageable);
 		}else if (genre!=null) {
 			 books = br.findByGenreContainingIgnoreCase(genre, pageable);
-		}else if (dateOfPublication!=null) {
-			 books = br.findByDateOfPublicationContaining(dateOfPublication, pageable);
 		} else {
 			books = br.findAll(pageable);
 		}
