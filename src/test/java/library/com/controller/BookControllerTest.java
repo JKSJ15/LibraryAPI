@@ -1,8 +1,6 @@
 package library.com.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,10 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import library.com.dto.BookDto;
-import library.com.dto.BookMapper;
-import library.com.entity.Book;
 import library.com.exceptions.BookNotFoundException;
 import library.com.service.BookService;
 import library.com.util.BookUtilTest;
@@ -33,7 +28,7 @@ public class BookControllerTest {
 	@Mock
 	BookService bs;
 	
-	@BeforeEach // isso isola a classe controller e não depende da logica nem nada, so diz que vai voltar um page
+	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 	PageImpl<BookDto> bookPage = new PageImpl<>(List.of(BookUtilTest.returnBookDtoGet()));

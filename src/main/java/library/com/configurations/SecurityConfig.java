@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) {
@@ -22,10 +24,8 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 				.authorizeHttpRequests(authorize-> authorize
 				.requestMatchers("/auth/**").permitAll()
-				.requestMatchers(HttpMethod.POST, "/books").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.PUT, "/books/**").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.DELETE, "/books/**").hasRole("ADMIN")
-				.anyRequest().permitAll())
+				.requestMatchers(HttpMethod.GET).permitAll()
+				.anyRequest().authenticated())
 				.build();
 	}
 	

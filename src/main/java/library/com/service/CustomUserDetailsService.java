@@ -12,7 +12,6 @@ public class CustomUserDetailsService implements UserDetailsService{
 	@Autowired
 	UserRepository rep;
 
-	//pega usuarios pro spring security
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return rep.findByLogin(username).orElseThrow();

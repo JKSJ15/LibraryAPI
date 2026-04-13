@@ -9,9 +9,7 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 import library.com.entity.Book;
-import library.com.exceptions.BookNotFoundException;
 import library.com.util.BookUtilTest;
 
 @DataJpaTest
@@ -19,8 +17,6 @@ public class ComBookRepositoryTests {
 	@Autowired
 	private BookRepository br;
 
-	
-	
 	@Test
 	@DisplayName("save persiste book when sucefull")
 	public void save_persisteBook_WhenSucefull() {

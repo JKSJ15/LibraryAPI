@@ -13,7 +13,6 @@ public class BookUtilTest {
 	}
 	public static Book returnBookPostOrPut() {
 		Book book = new Book("kaka", "jopao", LocalDate.now(), "romance");
-		book.setId(2l);
 		return book;
 	}
 }
