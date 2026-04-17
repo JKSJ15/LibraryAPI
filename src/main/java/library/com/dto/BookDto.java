@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 @Valid
 public class BookDto {
-	@NotNull
 	private Long id;
 	private String title;
 	private String author;
