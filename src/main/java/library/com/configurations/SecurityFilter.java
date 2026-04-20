@@ -12,6 +12,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import library.com.exceptions.UserNotFoundException;
 import library.com.repository.UserRepository;
 
 @Component
@@ -32,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter{
 		    var login = jwtService.validateToken(token);
 
 		    if (login != null) {
-		        UserDetails user = rep.findByLogin(login).orElseThrow();
+		        UserDetails user = rep.findByLogin(login).orElseThrow(()-> new UserNotFoundException("user not found!"));
 
 		        var authentication = new UsernamePasswordAuthenticationToken(
 		                user, null, user.getAuthorities());

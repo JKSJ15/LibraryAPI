@@ -1,12 +1,17 @@
 package library.com.entity;
 
 import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Book {
@@ -27,19 +32,43 @@ public class Book {
 	
 	@Column(name = "genre", length = 100)
 	private String genre;
+	
+	@Column(name = "description")
+    @NotBlank(message = "description cannot be empty")
+    private String description;
 
-	public Book(String title, String author, LocalDate dateOfPublication, String genre) {
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "book status cannot be null")
+    private BookStatus status;
+
+	public Book(String title, String author, LocalDate dateOfPublication, String genre, String description, BookStatus status) {
 		this.title = title;
 		this.author = author;
 		this.dateOfPublication = dateOfPublication;
 		this.genre = genre;
+		this.description = description;
+		this.status = status;
 	}
+
 	public Book() {}
 	
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public BookStatus getStatus() {
+		return status;
+	}
+	public void setStatus(BookStatus status) {
+		this.status = status;
+	}
 	public Long getId() {
 		return id;
 	}
-	
 	public void setId(Long id) {
 		this.id = id;
 	}

@@ -55,6 +55,8 @@ public class BookService {
 		find.setDateOfPublication(dto.getDateOfPublication());
 		find.setGenre(dto.getGenre());
 		find.setTitle(dto.getTitle());
+		find.setStatus(dto.getStatus());
+		find.setDescription(dto.getDescription());
 		br.save(find);
 		return BookMapper.toDto(find);
 	}

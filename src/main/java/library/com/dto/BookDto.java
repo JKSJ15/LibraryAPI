@@ -1,9 +1,11 @@
 package library.com.dto;
 
 import java.time.LocalDate;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import library.com.entity.BookStatus;
 
 @Valid
 public class BookDto {
@@ -12,23 +14,40 @@ public class BookDto {
 	private String author;
 	private LocalDate dateOfPublication;
 	private String genre;
+	private String description;
+    private BookStatus status;
 
-	public BookDto(@NotNull Long id,@NotEmpty String title, @NotEmpty String author,
-			@NotEmpty LocalDate dateOfPublication, String genre) {
+	public BookDto(Long id, String title, String author, LocalDate dateOfPublication, String genre, String description,
+			BookStatus status) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.dateOfPublication = dateOfPublication;
 		this.genre = genre;
+		this.description = description;
+		this.status = status;
 	}
 
-	
+
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public BookStatus getStatus() {
+		return status;
+	}
+	public void setStatus(BookStatus status) {
+		this.status = status;
+	}
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 	public Long getId() {
 		return id;
 	}
