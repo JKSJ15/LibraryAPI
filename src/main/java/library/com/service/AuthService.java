@@ -39,6 +39,7 @@ public class AuthService {
 		User newUser = new User(login.login(), encryptedPass, login.role());
 		rep.save(newUser);
 		}
+	
 	@PreAuthorize("permitAll()")
 	public String login(LoginDto login) {
 	    var authToken = new UsernamePasswordAuthenticationToken(

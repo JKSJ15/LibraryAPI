@@ -2,19 +2,23 @@ package library.com.dto;
 
 import java.time.LocalDate;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import library.com.entity.BookStatus;
 
-@Valid
 public class BookDto {
 	private Long id;
+	@NotBlank
 	private String title;
+	@NotBlank
 	private String author;
 	private LocalDate dateOfPublication;
+	@Schema(description = "Book genre", example = "Romance")
+	@NotBlank
 	private String genre;
 	private String description;
+	@Schema(description = "Current availability status of the book", example = "AVAILABLE")
+	@NotBlank
     private BookStatus status;
 
 	public BookDto(Long id, String title, String author, LocalDate dateOfPublication, String genre, String description,

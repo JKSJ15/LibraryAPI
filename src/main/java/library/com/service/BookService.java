@@ -57,6 +57,11 @@ public class BookService {
 		find.setTitle(dto.getTitle());
 		find.setStatus(dto.getStatus());
 		find.setDescription(dto.getDescription());
+		LocalDate limit = LocalDate.of(1, 01, 01);
+		if (dto.getDateOfPublication().isBefore(limit) ||
+			dto.getDateOfPublication().isAfter(LocalDate.now())) {
+		throw new InvalidDateException("Invalid date!");	
+		}
 		br.save(find);
 		return BookMapper.toDto(find);
 	}

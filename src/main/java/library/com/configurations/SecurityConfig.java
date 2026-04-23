@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -25,15 +27,21 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) {
-		return http.csrf(csrf -> csrf.disable())
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authorize-> authorize
-				.requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-				.requestMatchers(HttpMethod.GET, "/books/**").permitAll()
-				.anyRequest().authenticated())
-				.addFilterBefore(securityFilter , UsernamePasswordAuthenticationFilter.class)
-				.build();
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	    return http
+	        .csrf(csrf -> csrf.disable())
+	        .sessionManagement(session ->
+	            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	        .authorizeHttpRequests(authorize -> authorize
+	            .requestMatchers("/v3/api-docs/**",
+	                    "/swagger-ui/**",
+	                    "/swagger-ui.html").permitAll()
+	            .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+	            .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
+	            .anyRequest().authenticated()
+	        )
+	        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+	        .build();
 	}
 	
 	@Bean

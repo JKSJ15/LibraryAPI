@@ -25,25 +25,23 @@ public class SecurityFilter extends OncePerRequestFilter{
         this.rep = rep;
     }
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		var token = this.recoverToken(request);
-		if (token != null) {
-		    var login = jwtService.validateToken(token);
-
-		    if (login != null) {
-		        UserDetails user = rep.findByLogin(login).orElseThrow(()-> new UserNotFoundException("user not found!"));
-
-		        var authentication = new UsernamePasswordAuthenticationToken(
-		                user, null, user.getAuthorities());
-
-		        SecurityContextHolder.getContext().setAuthentication(authentication);
-		    }
-		}
-		filterChain.doFilter(request, response);
-		
-	}
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+        var token = recoverToken(request);
+        if (token != null) {
+            var login = jwtService.validateToken(token);
+            if (login != null) {
+                UserDetails user = rep.findByLogin(login).orElseThrow();
+                var authentication = new UsernamePasswordAuthenticationToken(
+                        user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
 	private String recoverToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
 
