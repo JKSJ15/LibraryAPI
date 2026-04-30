@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import library.com.entity.BookStatus;
 
 public class BookDto {
@@ -18,7 +19,7 @@ public class BookDto {
 	private String genre;
 	private String description;
 	@Schema(description = "Current availability status of the book", example = "AVAILABLE")
-	@NotBlank
+	@NotNull
     private BookStatus status;
 
 	public BookDto(Long id, String title, String author, LocalDate dateOfPublication, String genre, String description,

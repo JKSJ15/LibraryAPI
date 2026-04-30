@@ -1,8 +1,8 @@
 package library.com.controller;
 
 import java.util.List;
+
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,12 +10,12 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import library.com.dto.BookDto;
 import library.com.exceptions.BookNotFoundException;
 import library.com.service.BookService;
@@ -28,33 +28,18 @@ public class BookControllerTest {
 	@Mock
 	BookService bs;
 	
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
-	PageImpl<BookDto> bookPage = new PageImpl<>(List.of(BookUtilTest.returnBookDtoGet()));
-	BDDMockito.when(bs.find(
-	        ArgumentMatchers.anyString(),
-	        ArgumentMatchers.anyString(),
-	        ArgumentMatchers.anyString(),
-	        ArgumentMatchers.any(Pageable.class)
-	)).thenReturn(bookPage);
-		
-	BDDMockito.when(bs.findById(ArgumentMatchers.anyLong()))
-        .thenReturn(BookUtilTest.returnBookDtoGet());
-	
-	BDDMockito.when(bs.findById(100000L))
-    .thenThrow(new BookNotFoundException("Book not found"));
-	
-	BDDMockito.when(bs.save(ArgumentMatchers.any(BookDto.class)))
-    .thenReturn(BookUtilTest.returnBookDtoGet());
-	
-	BDDMockito.doNothing().when(bs).delete(ArgumentMatchers.anyLong());
-	
-	
-	}
 	@Test
 	@DisplayName("Find return List of Book object when sucefull")
 	void find_returnsListOfBookObject_whenSucessful() {
+		PageImpl<BookDto> bookPage = new PageImpl<>(List.of(BookUtilTest.returnBookDtoGet()));
+
+	    BDDMockito.when(bs.find(
+	            ArgumentMatchers.any(),
+	            ArgumentMatchers.any(),
+	            ArgumentMatchers.any(),
+	            ArgumentMatchers.any(Pageable.class)
+	    )).thenReturn(bookPage);
+		
 		BookDto book = BookUtilTest.returnBookDtoGet();
 		Pageable pageable = Pageable.unpaged();
 		ResponseEntity<Page<BookDto>> list = bc.find(book.getTitle(), book.getAuthor() , book.getGenre(), pageable);
@@ -67,6 +52,9 @@ public class BookControllerTest {
 	@Test
 	@DisplayName("FindById returns BookDto object when sucefull")
 	void findById_returnsBookDtoObject_whenSucessful() {
+		BDDMockito.when(bs.findById(ArgumentMatchers.anyLong()))
+        .thenReturn(BookUtilTest.returnBookDtoGet());
+		
 		BookDto book = BookUtilTest.returnBookDtoGet();
 		ResponseEntity<BookDto> dto = bc.findById(book.getId());
 		Assertions.assertThat(dto.getBody())
@@ -76,11 +64,17 @@ public class BookControllerTest {
 	@Test
 	@DisplayName("FindById throws BooNotFoundException when not found")
 	void findById_throwsBooNotFoundException_whenNotFound() {
+		BDDMockito.when(bs.findById(100000L))
+        .thenThrow(new BookNotFoundException("Book not found"));
+		
 		Assertions.assertThatThrownBy(() -> bc.findById(100000)).isInstanceOf(BookNotFoundException.class);
 	}
 	@Test
 	@DisplayName("save return BookDto when sucessful")
 	void save_returnsBookDto_WhenSucessful() {
+		BDDMockito.when(bs.save(ArgumentMatchers.any(BookDto.class)))
+        .thenAnswer(invocation -> invocation.getArgument(0));
+		
 		BookDto dto = BookUtilTest.returnBookDtoGet();
 		ResponseEntity<BookDto> dtoSaved = bc.save(dto);
 		
@@ -93,6 +87,8 @@ public class BookControllerTest {
 	@Test
 	@DisplayName("delete remove BookDto when sucessful")
 	void delete_removeBookDto_WhenSucessful() {
+		BDDMockito.doNothing().when(bs).delete(ArgumentMatchers.anyLong());
+		
 	    bc.delete(1L);
 	    BDDMockito.verify(bs).delete(1L);
 	}

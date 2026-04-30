@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import jakarta.servlet.http.HttpServletResponse;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -33,9 +31,13 @@ public class SecurityConfig {
 	        .sessionManagement(session ->
 	            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(authorize -> authorize
-	            .requestMatchers("/v3/api-docs/**",
+	            .requestMatchers("/library-doc/**",
+	                    "/library-doc",
+	                    "/library-api-docs/**",
+	                    "/library-api-docs",
 	                    "/swagger-ui/**",
-	                    "/swagger-ui.html").permitAll()
+	                    "/actuator/prometheus",
+	            	    "/actuator/health").permitAll()
 	            .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
 	            .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
 	            .anyRequest().authenticated()
