@@ -19,7 +19,8 @@ The system simulates a **library catalog**, where users can browse books and adm
 - Prometheus  
 - Grafana  
 - Springdoc OpenAPI (Swagger)  
-- JUnit  
+- JUnit
+- CI (Continuos Integration)
 
 ---
 
