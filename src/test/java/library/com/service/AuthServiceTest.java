@@ -48,7 +48,7 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        registerDto = new RegisterDto("test@email.com", "123456", UserRole.ROLE_USER);
+        registerDto = new RegisterDto("test@email.com", "123456");
         loginDto = new LoginDto("test@email.com", "123456");
 
         user = new User("test@email.com", "encrypted", UserRole.ROLE_USER);

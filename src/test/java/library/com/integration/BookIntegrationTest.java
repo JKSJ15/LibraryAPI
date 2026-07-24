@@ -85,8 +85,7 @@ public class BookIntegrationTest {
         String body = """
         {
           "login":"jakson@email.com",
-          "password":"123456",
-          "role":"ROLE_ADMIN"
+          "password":"123456"
         }
         """;
 

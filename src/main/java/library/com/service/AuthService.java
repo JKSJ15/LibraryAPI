@@ -13,6 +13,7 @@ import library.com.configurations.JwtService;
 import library.com.dto.LoginDto;
 import library.com.dto.RegisterDto;
 import library.com.entity.User;
+import library.com.entity.UserRole;
 import library.com.exceptions.UserAlreadyExistsException;
 import library.com.repository.UserRepository;
 
@@ -38,7 +39,7 @@ public class AuthService {
 		Optional<User> userOptional = rep.findByLogin(login.login());
 		if (userOptional.isPresent()) {throw new UserAlreadyExistsException("User already exists!");}
 		String encryptedPass = encoder.encode(login.password());
-		User newUser = new User(login.login(), encryptedPass, login.role());
+		User newUser = new User(login.login(), encryptedPass, UserRole.ROLE_USER);
 		rep.save(newUser);
 		}
 	
