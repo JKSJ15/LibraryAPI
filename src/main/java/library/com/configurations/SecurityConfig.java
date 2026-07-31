@@ -38,7 +38,8 @@ public class SecurityConfig {
 	                    "/swagger-ui/**",
 	                    "/actuator/prometheus",
 	            	    "/actuator/health").permitAll()
-	            .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+	            .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+				.requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
 	            .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
 	            .anyRequest().authenticated()
 	        )

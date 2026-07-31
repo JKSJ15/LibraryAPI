@@ -2,7 +2,6 @@ package library.com.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,9 +10,12 @@ import org.springframework.stereotype.Service;
 
 import library.com.configurations.JwtService;
 import library.com.dto.LoginDto;
+import library.com.dto.LoginResponseDto;
 import library.com.dto.RegisterDto;
+import library.com.dto.RefreshRequestDto;
 import library.com.entity.User;
 import library.com.entity.UserRole;
+import library.com.exceptions.InvalidTokenException;
 import library.com.exceptions.UserAlreadyExistsException;
 import library.com.repository.UserRepository;
 
@@ -21,30 +23,31 @@ import library.com.repository.UserRepository;
 public class AuthService {
 	private final UserRepository rep;
 	private final AuthenticationManager authMan;
-	@Autowired
-	private PasswordEncoder encoder;
+	private final PasswordEncoder encoder;
 	private final JwtService jwt;
+	private final RefreshTokenService refreshTokenService;
 	
-	
-	public AuthService(UserRepository rep, AuthenticationManager authMan, PasswordEncoder encoder, JwtService jwt) {
-		super();
+	public AuthService(UserRepository rep, AuthenticationManager authMan, PasswordEncoder encoder, JwtService jwt, RefreshTokenService refreshTokenService) {
 		this.rep = rep;
 		this.authMan = authMan;
 		this.encoder = encoder;
 		this.jwt = jwt;
+		this.refreshTokenService = refreshTokenService;
 	}
 
 	@PreAuthorize("permitAll()")
 	public void registerNewUser(RegisterDto login) {
 		Optional<User> userOptional = rep.findByLogin(login.login());
-		if (userOptional.isPresent()) {throw new UserAlreadyExistsException("User already exists!");}
+		if (userOptional.isPresent()) {
+			throw new UserAlreadyExistsException("User already exists!");
+		}
 		String encryptedPass = encoder.encode(login.password());
 		User newUser = new User(login.login(), encryptedPass, UserRole.ROLE_USER);
 		rep.save(newUser);
 		}
 	
 	@PreAuthorize("permitAll()")
-	public String login(LoginDto login) {
+	public LoginResponseDto login(LoginDto login) {
 	    var authToken = new UsernamePasswordAuthenticationToken(
 	            login.login(),
 	            login.password()
@@ -52,7 +55,26 @@ public class AuthService {
 	    var authentication = authMan.authenticate(authToken);
 	    User user = (User) authentication.getPrincipal();
 
-	    return jwt.generateToken(user);
+		String acessToken = jwt.generateToken(user);
+		String refreshToken = jwt.generateRefreshToken(user);
+		refreshTokenService.createRefreshToken(refreshToken, user);
+		
+	    return new LoginResponseDto(acessToken, refreshToken);
 	}
-	
+	public LoginResponseDto refreshToken(RefreshRequestDto request) {
+		if (!refreshTokenService.isRefreshTokenValid(request.refreshToken())) {
+			throw new InvalidTokenException("Invalid Refresh Token!");
+		}
+		String userLogin = jwt.validateRefreshToken(request.refreshToken());
+		User user = rep.findByLogin(userLogin)
+				.orElseThrow(() -> new InvalidTokenException("Invalid Refresh Token!"));
+		
+		String newAccessToken = jwt.generateToken(user);
+		String newRefreshToken = jwt.generateRefreshToken(user);
+
+		refreshTokenService.createRefreshToken(newRefreshToken, user);
+		refreshTokenService.deleteByToken(request.refreshToken());
+		
+		return new LoginResponseDto(newAccessToken, newRefreshToken);
+	}
 }

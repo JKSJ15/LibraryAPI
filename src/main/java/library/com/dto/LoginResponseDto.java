@@ -6,6 +6,11 @@ public record LoginResponseDto (@Schema(
         description = "JWT access token to be sent in the Authorization header",
         example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20ifQ.signature"
     ) 
-	String token){
+	String acessToken,
+    @Schema(
+        description = "JWT refresh token to be sent in the endpoin Refresh",
+        example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBlbWFpbC5jb20ifQ.signature"
+    ) 
+    String refreshToken){
 
 }

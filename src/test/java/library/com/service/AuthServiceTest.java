@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import library.com.configurations.JwtService;
 import library.com.dto.LoginDto;
+import library.com.dto.LoginResponseDto;
 import library.com.dto.RegisterDto;
 import library.com.entity.User;
 import library.com.entity.UserRole;
@@ -93,9 +94,9 @@ class AuthServiceTest {
         Mockito.when(jwt.generateToken(user))
                 .thenReturn("fake-jwt-token");
 
-        String token = authService.login(loginDto);
+        LoginResponseDto tokens = authService.login(loginDto);
 
-        assertThat(token).isEqualTo("fake-jwt-token");
+        assertThat(tokens.acessToken()).isEqualTo("fake-jwt-token");
     }
 
     @Test

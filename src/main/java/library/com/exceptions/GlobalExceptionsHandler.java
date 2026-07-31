@@ -33,4 +33,10 @@ public class GlobalExceptionsHandler {
 				, HttpStatus.BAD_REQUEST , HttpStatus.BAD_REQUEST.value());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(model);
 	}
+	@ExceptionHandler()
+	public ResponseEntity<ExceptionModel> useInvalidTokenException(InvalidTokenException e){
+		ExceptionModel model = new ExceptionModel(e.getMessage(), LocalDateTime.now()
+				, HttpStatus.UNAUTHORIZED , HttpStatus.UNAUTHORIZED.value());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(model);
+	}
 }
