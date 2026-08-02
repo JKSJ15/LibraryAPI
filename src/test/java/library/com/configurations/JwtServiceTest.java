@@ -29,7 +29,7 @@ public class JwtServiceTest {
         User user = new User();
         user.setEmail("test@email.com");
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateAccessToken(user);
 
         assertThat(token).isNotNull();
         assertThat(token).isNotBlank();
@@ -40,8 +40,8 @@ public class JwtServiceTest {
         User user = new User();
         user.setEmail("test@email.com");
 
-        String token = jwtService.generateToken(user);
-        String subject = jwtService.validateToken(token);
+        String token = jwtService.generateAccessToken(user);
+        String subject = jwtService.validateAccessToken(token);
 
         assertThat(subject).isEqualTo(user.getLogin());
     }
@@ -50,7 +50,7 @@ public class JwtServiceTest {
     void validateToken_shouldReturnNull_whenTokenIsInvalid() {
         String invalidToken = "token.invalido.qualquer";
 
-        String subject = jwtService.validateToken(invalidToken);
+        String subject = jwtService.validateAccessToken(invalidToken);
 
         assertThat(subject).isNull();
     }
@@ -60,9 +60,9 @@ public class JwtServiceTest {
         User user = new User();
         user.setEmail("test@email.com");
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateAccessToken(user);
         String tamperedToken = token + "abc";
-        String subject = jwtService.validateToken(tamperedToken);
+        String subject = jwtService.validateAccessToken(tamperedToken);
 
         assertThat(subject).isNull();
     }

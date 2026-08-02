@@ -15,6 +15,7 @@ import library.com.dto.RegisterDto;
 import library.com.dto.RefreshRequestDto;
 import library.com.entity.User;
 import library.com.entity.UserRole;
+import library.com.exceptions.InvalidRefreshTokenException;
 import library.com.exceptions.InvalidTokenException;
 import library.com.exceptions.UserAlreadyExistsException;
 import library.com.repository.UserRepository;
@@ -44,8 +45,7 @@ public class AuthService {
 		String encryptedPass = encoder.encode(login.password());
 		User newUser = new User(login.login(), encryptedPass, UserRole.ROLE_USER);
 		rep.save(newUser);
-		}
-	
+	}
 	@PreAuthorize("permitAll()")
 	public LoginResponseDto login(LoginDto login) {
 	    var authToken = new UsernamePasswordAuthenticationToken(
@@ -54,27 +54,25 @@ public class AuthService {
 	    );
 	    var authentication = authMan.authenticate(authToken);
 	    User user = (User) authentication.getPrincipal();
-
-		String acessToken = jwt.generateToken(user);
-		String refreshToken = jwt.generateRefreshToken(user);
-		refreshTokenService.createRefreshToken(refreshToken, user);
-		
-	    return new LoginResponseDto(acessToken, refreshToken);
+		LoginResponseDto response = createTokens(user);
+	    return response;
 	}
+	@PreAuthorize("permitAll()")
 	public LoginResponseDto refreshToken(RefreshRequestDto request) {
 		if (!refreshTokenService.isRefreshTokenValid(request.refreshToken())) {
-			throw new InvalidTokenException("Invalid Refresh Token!");
+			throw new InvalidRefreshTokenException("Invalid Refresh Token!");
 		}
 		String userLogin = jwt.validateRefreshToken(request.refreshToken());
 		User user = rep.findByLogin(userLogin)
-				.orElseThrow(() -> new InvalidTokenException("Invalid Refresh Token!"));
-		
-		String newAccessToken = jwt.generateToken(user);
-		String newRefreshToken = jwt.generateRefreshToken(user);
-
-		refreshTokenService.createRefreshToken(newRefreshToken, user);
+				.orElseThrow(() -> new InvalidRefreshTokenException("Invalid Refresh Token!"));
+		LoginResponseDto response = createTokens(user);
 		refreshTokenService.deleteByToken(request.refreshToken());
-		
+		return response;
+	}
+	private LoginResponseDto createTokens(User user){
+		String newAccessToken = jwt.generateAccessToken(user);
+		String newRefreshToken = jwt.generateRefreshToken(user);
+		refreshTokenService.createRefreshToken(newRefreshToken, user);
 		return new LoginResponseDto(newAccessToken, newRefreshToken);
 	}
 }

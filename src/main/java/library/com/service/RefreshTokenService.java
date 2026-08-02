@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import library.com.entity.RefreshToken;
 import library.com.entity.User;
+import library.com.exceptions.InvalidRefreshTokenException;
 import library.com.exceptions.InvalidTokenException;
 import library.com.repository.RefreshTokenRepository;
 
@@ -23,8 +24,7 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
     public boolean isRefreshTokenValid(String refreshToken) {
-        RefreshToken token = refreshTokenRepository.findByToken(refreshToken)
-        .orElseThrow(() -> new InvalidTokenException("Invalid Refresh Token!"));
+        RefreshToken token = getRefreshToken(refreshToken);
         if (token.isExpired()){
             return false;
         }
@@ -34,8 +34,11 @@ public class RefreshTokenService {
         refreshTokenRepository.deleteByUser(user);
     }
     public void deleteByToken(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new InvalidTokenException("Invalid Refresh Token!"));
+        RefreshToken refreshToken = getRefreshToken(token);
         refreshTokenRepository.delete(refreshToken);
+    }
+    private RefreshToken getRefreshToken(String token) {
+        return refreshTokenRepository.findByToken(token)
+                .orElseThrow(() -> new InvalidRefreshTokenException("Invalid Refresh Token!"));
     }
 }

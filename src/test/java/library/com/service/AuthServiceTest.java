@@ -91,7 +91,7 @@ class AuthServiceTest {
         Mockito.when(authentication.getPrincipal())
                 .thenReturn(user);
 
-        Mockito.when(jwt.generateToken(user))
+        Mockito.when(jwt.generateAccessToken(user))
                 .thenReturn("fake-jwt-token");
 
         LoginResponseDto tokens = authService.login(loginDto);
@@ -109,7 +109,7 @@ class AuthServiceTest {
         Mockito.when(authentication.getPrincipal())
                 .thenReturn(user);
 
-        Mockito.when(jwt.generateToken(Mockito.any()))
+        Mockito.when(jwt.generateAccessToken(Mockito.any()))
                 .thenReturn("token");
 
         authService.login(loginDto);

@@ -42,7 +42,7 @@ public class BookControllerTest {
 		
 		BookDto book = BookUtilTest.returnBookDtoGet();
 		Pageable pageable = Pageable.unpaged();
-		ResponseEntity<Page<BookDto>> list = bc.find(book.getTitle(), book.getAuthor() , book.getGenre(), pageable);
+		ResponseEntity<Page<BookDto>> list = bc.find(book.title(), book.author() , book.genre(), pageable);
 		
 		Assertions.assertThat(list.getStatusCode().is2xxSuccessful()).isTrue();
 		Assertions.assertThat(list)
@@ -56,7 +56,7 @@ public class BookControllerTest {
         .thenReturn(BookUtilTest.returnBookDtoGet());
 		
 		BookDto book = BookUtilTest.returnBookDtoGet();
-		ResponseEntity<BookDto> dto = bc.findById(book.getId());
+		ResponseEntity<BookDto> dto = bc.findById(book.id());
 		Assertions.assertThat(dto.getBody())
         .usingRecursiveComparison()
         .isEqualTo(book);

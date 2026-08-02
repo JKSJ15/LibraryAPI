@@ -9,9 +9,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Book {
@@ -20,11 +17,9 @@ public class Book {
 	private Long id;
 	
 	@Column(name = "title", length = 100)
-	@NotEmpty(message = "title cannot be empty!")
 	private String title;
 	
 	@Column(name = "author", length = 100)
-	@NotEmpty(message = "author cannot be empty!")
 	private String author;
 	
 	@Column(name = "dateofpublication")
@@ -34,12 +29,10 @@ public class Book {
 	private String genre;
 	
 	@Column(name = "description")
-    @NotBlank(message = "description cannot be empty")
     private String description;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "book status cannot be null")
     private BookStatus status;
 
 	public Book(String title, String author, LocalDate dateOfPublication, String genre, String description, BookStatus status) {

@@ -2,9 +2,9 @@ package library.com.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import library.com.exceptions.UnauthorizedException;
 import library.com.repository.UserRepository;
 
 @Service
@@ -15,8 +15,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		return rep.findByLogin(username).orElseThrow();
+	public UserDetails loadUserByUsername(String username) throws UnauthorizedException {
+		return rep.findByLogin(username).orElseThrow(() -> new UnauthorizedException("invalid username"));
 	}
 
 }

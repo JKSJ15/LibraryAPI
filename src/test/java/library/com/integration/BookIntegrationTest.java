@@ -57,14 +57,14 @@ public class BookIntegrationTest {
         admin.setPassword(passwordEncoder.encode("123456"));
         admin.setRole(UserRole.ROLE_ADMIN);
         userRepository.save(admin);
-        tokenAdm = jwtService.generateToken(admin);
+        tokenAdm = jwtService.generateAccessToken(admin);
 
         User user = new User();
         user.setEmail("user@email.com");
         user.setPassword(passwordEncoder.encode("123456"));
         user.setRole(UserRole.ROLE_USER);
         userRepository.save(user);
-        tokenUser = jwtService.generateToken(user);
+        tokenUser = jwtService.generateAccessToken(user);
         
         bodyPostOrput = """
                 {

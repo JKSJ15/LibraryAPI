@@ -39,7 +39,6 @@ class BookServiceTest {
     void setUp() {
         book = BookUtilTest.returnBookPostOrPut();
         dto = BookUtilTest.returnBookDtoGet();
-        dto.setId(null);
     }
 
     @Test

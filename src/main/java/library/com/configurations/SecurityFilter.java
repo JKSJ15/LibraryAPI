@@ -31,7 +31,7 @@ public class SecurityFilter extends OncePerRequestFilter{
             throws ServletException, IOException {
         var token = recoverToken(request);
         if (token != null) {
-            var login = jwtService.validateToken(token);
+            var login = jwtService.validateAccessToken(token);
             if (login != null) {
                 UserDetails user = rep.findByLogin(login).orElseThrow();
                 var authentication = new UsernamePasswordAuthenticationToken(

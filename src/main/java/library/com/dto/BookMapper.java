@@ -4,8 +4,8 @@ import library.com.entity.Book;
 
 public class BookMapper {
 	public static Book toBook(BookDto dto) {
-		return new Book(dto.getTitle(), dto.getAuthor(), dto.getDateOfPublication(),
-				dto.getGenre(), dto.getDescription(), dto.getStatus());
+		return new Book(dto.title(), dto.author(), dto.dateOfPublication(),
+				dto.genre(), dto.description(), dto.status());
 	}
 	public static BookDto toDto(Book book) {
 		return new BookDto(book.getId(),book.getTitle(), book.getAuthor(),

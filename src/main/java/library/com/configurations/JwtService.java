@@ -20,7 +20,7 @@ public class JwtService {
 	@Value("${api.security.token.secret}")
 	private String secret;
 	
-	public String generateToken(User user) {
+	public String generateAccessToken(User user) {
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(secret);
 			String token = JWT.create()
@@ -34,7 +34,7 @@ public class JwtService {
 		}
 	}
 	
-	public String validateToken(String token) {
+	public String validateAccessToken(String token) {
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(secret);
 			return JWT.require(algorithm)

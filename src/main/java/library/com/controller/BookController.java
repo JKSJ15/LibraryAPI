@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,10 +24,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import library.com.dto.BookDto;
 import library.com.service.BookService;
 
 @Tag(name = "books")
+@Validated
 @RestController
 @RequestMapping("/books")
 public class BookController {
@@ -43,7 +46,8 @@ public class BookController {
 	})
 	@PreAuthorize("permitAll()")
 	@GetMapping("/{id}")
-	public ResponseEntity<BookDto> findById(@Parameter(description = "ID of the book") @PathVariable long id){
+	public ResponseEntity<BookDto> findById(@Parameter(description = "ID of the book") @PathVariable
+	 @Min(value = 1, message = "id must be greater than zero") long id){
 		return new ResponseEntity<>(bs.findById(id), HttpStatus.OK);
 	}
 	
@@ -69,7 +73,7 @@ public class BookController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<BookDto> save(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "body of book to be saved")
-	@RequestBody BookDto dto) {
+	@RequestBody @Valid BookDto dto) {
 		return new ResponseEntity<>(bs.save(dto), HttpStatus.CREATED);
 	}
 	
@@ -82,7 +86,8 @@ public class BookController {
 	})
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@Parameter(description = "ID of the book") @PathVariable long id){
+	public ResponseEntity<Void> delete(@Parameter(description = "ID of the book") @PathVariable
+	@Min(value = 1, message = "id must be greater than zero") long id){
 		bs.delete(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -97,7 +102,8 @@ public class BookController {
 		})
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
-	public ResponseEntity<BookDto> update(@Parameter(description = "ID of the book") @PathVariable long id, 
+	public ResponseEntity<BookDto> update(@Parameter(description = "ID of the book") @PathVariable
+	 @Min(value = 1, message = "id must be greater than zero") long id, 
 		@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "new body of book to be updated")
 		@Valid @RequestBody BookDto dto){
 		return new ResponseEntity<>(bs.update(id, dto), HttpStatus.OK);

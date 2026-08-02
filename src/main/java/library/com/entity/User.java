@@ -28,14 +28,14 @@ public class User implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_user")
 	private Long id;
-	@NotEmpty
+	@NotEmpty(message = "Login cannot be empty")
 	@Column(nullable = false, unique = true, name= "login_user")
 	private String login;
-	@NotEmpty
+	@NotEmpty(message = "Password cannot be empty")	
 	@Column(nullable = false, name= "passw_user")
 	private String password;
 	@Enumerated(EnumType.STRING)
-	@NotNull
+	@NotNull(message = "Role cannot be null")
 	private UserRole role;
 
 	public User(@Email String login, String password, @NotBlank UserRole role) {

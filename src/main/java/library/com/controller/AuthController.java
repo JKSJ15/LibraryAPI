@@ -72,6 +72,12 @@ public class AuthController {
 	public ResponseEntity<LoginResponseDto> refreshToken(@RequestBody RefreshRequestDto request) {
 		return ResponseEntity.ok(service.refreshToken(request));
 	}
+
+	@Operation(summary = "Logout", description = "Invalidates the refresh token for the authenticated user.")
+	@ApiResponses({
+		@ApiResponse(responseCode = "204", description = "Logout successful"),
+		@ApiResponse(responseCode = "401", description = "Unauthorized")
+		})
 	@PostMapping("/logout")
 	@Transactional
 	public ResponseEntity<Void> logout(Authentication authentication) {
@@ -80,5 +86,4 @@ public class AuthController {
 		refreshTokenService.deleteByUser(user);
 		return ResponseEntity.noContent().build();
 	}
-	
 }
