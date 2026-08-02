@@ -43,6 +43,10 @@ class AuthServiceTest {
     @Mock
     private JwtService jwt;
 
+
+    @Mock
+    RefreshTokenService refreshTokenService;
+
     private RegisterDto registerDto;
     private LoginDto loginDto;
     private User user;

@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
+import jakarta.transaction.Transactional;
 import library.com.configurations.JwtService;
 import library.com.entity.User;
 import library.com.entity.UserRole;
@@ -32,6 +33,7 @@ import library.com.util.BookUtilTest;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 @ActiveProfiles("test")
 public class BookIntegrationTest {
     @Autowired
@@ -50,8 +52,6 @@ public class BookIntegrationTest {
     
     @BeforeEach
     void setup() {
-        userRepository.deleteAll();
-
         User admin = new User();
         admin.setEmail("admin@email.com");
         admin.setPassword(passwordEncoder.encode("123456"));
@@ -84,7 +84,7 @@ public class BookIntegrationTest {
     void registerShouldRegisterNewUser() throws Exception {
         String body = """
         {
-          "login":"jakson@email.com",
+          "login":"AnyPerson@email.com",
           "password":"123456"
         }
         """;
@@ -112,7 +112,7 @@ public class BookIntegrationTest {
     }
 
     @Test
-    void LoginShouldReturnForbiddenWhenBadCredentiais() throws Exception {
+    void LoginShouldReturnUnauthorizedWhenBadCredentiais() throws Exception {
         String body = """
         {
            "email":"anyemail.anycom",
@@ -123,8 +123,9 @@ public class BookIntegrationTest {
         mvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
+
     
     //BOOKS ---------------------
     

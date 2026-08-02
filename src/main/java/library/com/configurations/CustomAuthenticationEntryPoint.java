@@ -30,12 +30,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                     "timestamp": "%s",
                     "status": 401,
                     "error": "Unauthorized",
-                    "message": "Authentication required",
-                    "path": "%s"
+                    "message": "Authentication required"
                 }
                 """.formatted(
-                    LocalDateTime.now(),
-                    request.getRequestURI()
+                    LocalDateTime.now()
                 ));
     }
 }

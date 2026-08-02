@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,8 @@ public class AuthService {
 	}
 	@PreAuthorize("permitAll()")
 	public LoginResponseDto login(LoginDto login) {
-	    var authToken = new UsernamePasswordAuthenticationToken(
+	    try{
+		var authToken = new UsernamePasswordAuthenticationToken(
 	            login.login(),
 	            login.password()
 	    );
@@ -56,6 +58,9 @@ public class AuthService {
 	    User user = (User) authentication.getPrincipal();
 		LoginResponseDto response = createTokens(user);
 	    return response;
+	}catch(BadCredentialsException e){
+		throw new BadCredentialsException("Invalid password!");
+	}
 	}
 	@PreAuthorize("permitAll()")
 	public LoginResponseDto refreshToken(RefreshRequestDto request) {
