@@ -42,7 +42,8 @@ public class AuthController {
 	@Operation(summary = "Register a new user")
 	@ApiResponses({
 		@ApiResponse(responseCode = "201", description = "User registered successfully"),
-        @ApiResponse(responseCode = "400", description = "Invalid request data or user already exists")
+        @ApiResponse(responseCode = "400", description = "Invalid request data"),
+		@ApiResponse(responseCode = "409", description = "user already exists")
 		})
 	@PostMapping("/register")
 	public ResponseEntity<Void> register(@io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -54,7 +55,8 @@ public class AuthController {
 	@Operation(summary = "Authenticate user", description = "Returns a JWT Bearer access token and refresh token. Use the access token in the Authorization header as: Bearer <token>")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "Authentication successful"),
-        @ApiResponse(responseCode = "403", description = "Invalid credentials")
+		@ApiResponse(responseCode = "400", description = "Invalid request data"),
+        @ApiResponse(responseCode = "401", description = "Invalid credentials - username or password")
 		})
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponseDto> login(@io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -66,7 +68,8 @@ public class AuthController {
 	@Operation(summary = "Refresh access token", description = "Returns a new JWT Bearer access token and refresh Token.")
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "Token refreshed successfully"),
-		@ApiResponse(responseCode = "401", description = "Invalid refresh token")
+		@ApiResponse(responseCode = "400", description = "Invalid request data"),
+        @ApiResponse(responseCode = "401", description = "Invalid refresh or access token")
 		})
 	@PostMapping("/refresh")
 	public ResponseEntity<LoginResponseDto> refreshToken(@RequestBody RefreshRequestDto request) {
@@ -76,7 +79,7 @@ public class AuthController {
 	@Operation(summary = "Logout", description = "Invalidates the refresh token for the authenticated user.")
 	@ApiResponses({
 		@ApiResponse(responseCode = "204", description = "Logout successful"),
-		@ApiResponse(responseCode = "401", description = "Unauthorized")
+		@ApiResponse(responseCode = "401", description = "Invalid access token")
 		})
 	@PostMapping("/logout")
 	@Transactional

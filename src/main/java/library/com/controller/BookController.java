@@ -68,7 +68,7 @@ public class BookController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "201", description = "Book saved successfully"),
 	    @ApiResponse(responseCode = "400", description = "Invalid request data"),
-	    @ApiResponse(responseCode = "403", description = "Forbidden")
+	    @ApiResponse(responseCode = "403", description = "Role User is Forbidden")
 	})
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
@@ -82,7 +82,7 @@ public class BookController {
 	@ApiResponses({
 	    @ApiResponse(responseCode = "204", description = "Book deleted successfully"),
 	    @ApiResponse(responseCode = "404", description = "Book not found"),
-	    @ApiResponse(responseCode = "403", description = "Forbidden")
+	    @ApiResponse(responseCode = "403", description = "Role User is Forbidden")
 	})
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
@@ -98,7 +98,7 @@ public class BookController {
 		@ApiResponse (responseCode = "200", description = "Book updated successfully"),
 	    @ApiResponse(responseCode = "400", description = "Invalid request data"),
 		@ApiResponse(responseCode = "404", description = "Book not found"),
-	    @ApiResponse(responseCode = "403", description = "Forbidden")
+	    @ApiResponse(responseCode = "403", description = "Role User is Forbidden")
 		})
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
